@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ScrollView
+        android:layout_centerInParent="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingBottom="45dp"
+            android:paddingLeft="45dp"
+            android:paddingRight="45dp">
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:src="@drawable/ic_logo"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="35dp"
+                android:gravity="center"
+                android:text="@string/welcome"
+                android:textColor="@color/colorPrimary"
+                android:textSize="25sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:lineSpacingExtra="3dp"
+                android:text="@string/welcome_desc"
+                android:textSize="16sp"/>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

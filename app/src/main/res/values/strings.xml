@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">ShutApp</string>
+
+    <!-- Welcome -->
+    <string name="welcome">Welcome to ShutApp</string>
+    <string name="welcome_desc">I\'ll automatically read your muted WhatsApp chats and prevent them from jumping to the top of the list!</string>
+
+    <!-- Dialog Buttons -->
+    <string name="ok">OK</string>
+
+    <!-- No Root -->
+    <string name="no_root">Device Not Rooted</string>
+    <string name="no_root_desc">Your device is not rooted. You must root your device to use this application!</string>
+
+    <!-- No Root Access -->
+    <string name="no_root_access">No Root Access</string>
+    <string name="no_root_access_desc">You must provide root access to ShutApp.\n\nPlease open the SuperSU app and grant root access to ShutApp.</string>
+</resources>
