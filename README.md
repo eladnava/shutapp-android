@@ -15,7 +15,7 @@ ShutApp is an Android app for **rooted devices** that will automatically mark yo
 
 ## Demo
 
-![Demo](https://raw.github.com/eladnava/shutapp-android/master/assets/preview.png)
+![Demo](https://raw.github.com/eladnava/shutapp-android/master/assets/screenshot.png)
 
 ## License
 
