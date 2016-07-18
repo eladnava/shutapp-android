@@ -106,28 +106,14 @@ public class NotificationHandler {
     }
 
     private void updateChatSortTimestamp(String jid) throws Exception {
-        // Execute SQL query
-        List<HashMap<String, String>> rows = mDB.select(new String[]{"creation"}, "chat_list", "key_remote_jid = '" + jid + "'", WhatsApp.MESSAGE_DB);
-
-        // Couldn't find jid for some reason?
-        if (rows.size() == 0) {
-            return;
-        }
-
-        // Get group creation date
-        String creation = rows.get(0).get("creation");
-
-        // Empty creation date? (one-on-one chats don't have it)
-        if (creation == "") {
-            // Fallback to 24 hours ago
-            creation = (System.currentTimeMillis() - (1000 * 60 * 60 * 24)) + "";
-        }
+        // Set last message timestamp to 48 hours ago
+        String sortTimestamp = (System.currentTimeMillis() - (1000 * 60 * 60 * 48)) + "";
 
         // Initialize chat list update object
         HashMap<String, String> chat = new HashMap<>();
 
         // Set the sort timestamp of this group to the creation date
-        chat.put("sort_timestamp", creation);
+        chat.put("sort_timestamp", sortTimestamp);
 
         // Update chat list table
         mDB.update("chat_list", chat, "key_remote_jid = '" + jid + "'", WhatsApp.MESSAGE_DB);
