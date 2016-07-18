@@ -6,9 +6,9 @@ ShutApp is an Android app for **rooted devices** that will automatically mark yo
 
 ## Usage
 
-1. Clone the repository locally
-2. Open the project with Android Studio
-3. Run the application on a rooted device
+1. Download the [APK](app/app-release.apk) to your computer
+2. Install it by running `adb install app-release.apk`
+3. Open the application on your device
 4. Grant root access to ShutApp when requested
 5. Grant notificaiton access to ShutApp when requested
 6. Configure all of your muted groups to display notifications when muted -- this is what invokes ShutApp to run and mark them as read
