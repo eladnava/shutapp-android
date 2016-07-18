@@ -6,7 +6,7 @@ ShutApp is an Android app for **rooted devices** that will automatically mark yo
 
 ## Usage
 
-1. Download the [APK](app/app-release.apk) to your computer
+1. Download the [APK](https://github.com/eladnava/shutapp-android/blob/master/app/app-release.apk?raw=true) to your computer
 2. Install it by running `adb install app-release.apk`
 3. Open the application on your device
 4. Grant root access to ShutApp when requested
