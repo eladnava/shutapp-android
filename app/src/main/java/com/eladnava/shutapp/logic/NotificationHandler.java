@@ -10,6 +10,7 @@ import com.eladnava.shutapp.util.DB;
 import com.stericson.RootShell.RootShell;
 import com.stericson.RootShell.execution.Command;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -34,28 +35,76 @@ public class NotificationHandler {
         // Log the notification
         Log.d(Logging.TAG, "WhatsApp notification detected");
 
-        // Get message jid (from tag or extras)
-        String jid = getNotificationJid(notification);
+        // List of unread chat jids
+        List<String> jids = new ArrayList<>();
 
-        // Verify the jid is currently muted
-        if (!isJidMuted(jid)) {
-            return;
+        // Get message jid (from tag or extras)
+        String notificationJid = getNotificationJid(notification);
+
+        // Got one?
+        if (notificationJid != null){
+            // Add it
+            jids.add(notificationJid);
+        }
+        else {
+            // Null JID, probably more than 1 unread chat
+            jids = getUnreadChatJids();
         }
 
-        // Log what we're doing
-        Log.d(Logging.TAG, "Marking jid " + jid + " as read");
+        // Keep track of whether we found a muted JID or not
+        boolean foundMutedJid = false;
 
-        // Hide it ASAP so user won't see it in notification bar
-        mNotificationListener.cancelNotification(notification.getKey());
+        // Traverse unread JIDs
+        for (String jid : jids) {
+            // Verify the jid is currently muted
+            if (!isJidMuted(jid)) {
+                return;
+            }
 
-        // Set badge count to 0 for this jid
-        updateChatUnreadCount(jid);
+            // First muted JID we encounter?
+            if (!foundMutedJid) {
+                // Log what we're doing
+                Log.d(Logging.TAG, "Hiding notification containing jid " + jid);
 
-        // Set sort timestamp to group creation date
-        updateChatSortTimestamp(jid);
+                // Hide notification ASAP
+                mNotificationListener.cancelNotification(notification.getKey());
+            }
 
-        // Restart WhatsApp interface
-        restartWhatsApp();
+            // Prevent hiding the notification twice
+            foundMutedJid = true;
+
+            // Log what we're doing
+            Log.d(Logging.TAG, "Marking jid " + jid + " as read");
+
+            // Set badge count to 0 for this jid
+            updateChatUnreadCount(jid);
+
+            // Set sort timestamp to group creation date
+            updateChatSortTimestamp(jid);
+        }
+
+        // Did we silence any muted chats?
+        if (foundMutedJid) {
+            // Restart WhatsApp interface - it will regenerate the notification if there are any unread chats left
+            restartWhatsApp();
+        }
+    }
+
+    private List<String> getUnreadChatJids() throws Exception {
+        // List of unread JIDs
+        List<String> unreadJids = new ArrayList<>();
+
+        // Execute SQL query
+        List<HashMap<String, String>> rows = mDB.select(new String[]{"jid"}, "wa_contacts", "unseen_msg_count > 0", WhatsApp.CONTACTS_DB);
+
+        // Traverse rows
+        for (HashMap<String, String> row : rows) {
+            // Add JID
+            unreadJids.add(row.get("jid"));
+        }
+
+        // All done
+        return unreadJids;
     }
 
     private String getNotificationJid(StatusBarNotification notification) throws Exception {
@@ -81,6 +130,9 @@ public class NotificationHandler {
     }
 
     private void restartWhatsApp() throws Exception {
+        // Log restart
+        Log.d(Logging.TAG, "Restarting " + WhatsApp.PACKAGE + " for changes to take effect");
+
         // Stop WhatsApp services
         RootShell.getShell(true).add(new Command(0, WhatsApp.STOP_WHATSAPP_COMMAND));
 
@@ -89,9 +141,6 @@ public class NotificationHandler {
 
         // Start messaging service
         RootShell.getShell(true).add(new Command(0, WhatsApp.START_MESSAGING_SERVICE_COMMAND));
-
-        // Log restart
-        Log.d(Logging.TAG, "Restarting " + WhatsApp.PACKAGE + " for changes to take effect");
     }
 
     private void updateChatUnreadCount(String jid) throws Exception {
