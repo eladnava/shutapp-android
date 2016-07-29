@@ -152,6 +152,15 @@ public class NotificationHandler {
 
         // Update contacts table
         mDB.update("wa_contacts", contact, "jid = '" + jid + "'", WhatsApp.CONTACTS_DB);
+
+        // Initialize chat update object
+        HashMap<String, String> chat = new HashMap<>();
+
+        // Set unseen msg count to 0
+        chat.put("unseen_message_count", "0");
+
+        // Update contacts table
+        mDB.update("chat_list", chat, "key_remote_jid = '" + jid + "'", WhatsApp.MESSAGE_DB);
     }
 
     private void updateChatSortTimestamp(String jid) throws Exception {
