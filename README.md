@@ -1,6 +1,6 @@
 # shutapp-android
 
-Are you tired of seeing your muted WhatsApp chats at the top of the chat list with unread messages, even though you have no intention of reading them at the moment?
+Are you tired of seeing your muted WhatsApp chats at the top of the chat list with unread messages, even though you have no intention of reading them?
 
 ShutApp is an Android app for **rooted devices** that will automatically mark your muted chats as read and prevent them from jumping to the top of the chat list.
 
