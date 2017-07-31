@@ -32,7 +32,7 @@ public class DB {
 
     public String getSQLCommand(String sql, String db) {
         // Build SQL command
-        return SQLite3.PATH_TO_SQLITE3_BINARY + " " + SQLite3.SEPARATOR_PARAM + " " + db + " \"" + sql + "\"";
+        return getPathToSQLite3() + " " + SQLite3.SEPARATOR_PARAM + " " + db + " \"" + sql + "\"";
     }
 
     public void update(String tableName, HashMap<String, String> row, String whereClause, String dbName) throws Exception {
@@ -155,10 +155,20 @@ public class DB {
         }
 
         // Install SQLite3 binary
-        installBinary(SQLite3.PATH_TO_SQLITE3_BINARY, resource);
+        installBinary(getPathToSQLite3(), resource);
 
         // Install Busybox binary
-        installBinary(Busybox.PATH_TO_BUSYBOX_BINARY, R.raw.busybox_binary);
+        installBinary(getPathToBusybox(), R.raw.busybox_binary);
+    }
+
+    public String getPathToSQLite3() {
+        // Use "ctx.getFilesDir()" for better compatibility
+        return mContext.getFilesDir().getAbsolutePath() + "/" + SQLite3.SQLITE3_BINARY_NAME;
+    }
+
+    public String getPathToBusybox() {
+        // Use "ctx.getFilesDir()" for better compatibility
+        return mContext.getFilesDir().getAbsolutePath() + "/" + Busybox.BUSYBOX_BINARY_NAME;
     }
 
     void installBinary(String path, int resource) throws Exception {

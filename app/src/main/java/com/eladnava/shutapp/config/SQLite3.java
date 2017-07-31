@@ -8,5 +8,5 @@ public class SQLite3 {
     public static String SEPARATOR_PARAM = "-separator '" + SEPARATOR_CHAR + "'";
 
     // SQLite3 binary path
-    public static String PATH_TO_SQLITE3_BINARY = "/data/data/" + ShutApp.PACKAGE + "/files/sqlite3";
+    public static String SQLITE3_BINARY_NAME = "sqlite3";
 }

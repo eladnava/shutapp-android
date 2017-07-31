@@ -134,7 +134,7 @@ public class NotificationHandler {
         Log.d(Logging.TAG, "Restarting " + WhatsApp.PACKAGE + " for changes to take effect");
 
         // Stop WhatsApp services
-        RootShell.getShell(true).add(new Command(0, WhatsApp.STOP_WHATSAPP_COMMAND));
+        RootShell.getShell(true).add(new Command(0, mDB.getPathToBusybox() + " " + WhatsApp.STOP_WHATSAPP_COMMAND));
 
         // Wait 200ms
         Thread.sleep(200);
