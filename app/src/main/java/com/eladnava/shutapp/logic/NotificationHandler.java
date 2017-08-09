@@ -4,6 +4,7 @@ import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
 
+import com.eladnava.shutapp.config.Dumpsys;
 import com.eladnava.shutapp.config.Logging;
 import com.eladnava.shutapp.config.WhatsApp;
 import com.eladnava.shutapp.util.DB;
@@ -86,7 +87,7 @@ public class NotificationHandler {
         // Did we silence any muted chats?
         if (foundMutedJid) {
             // Restart WhatsApp interface - it will regenerate the notification if there are any unread chats left
-            restartWhatsApp();
+            restartWhatsAppIfNotFocused();
         }
     }
 
@@ -127,6 +128,45 @@ public class NotificationHandler {
 
         // Return jid (might be null)
         return jid;
+    }
+
+    private void restartWhatsAppIfNotFocused() throws Exception {
+        // First check if WhatsApp is focused using dumpsys
+        Command command = new Command(0, Dumpsys.GET_FOREGROUND_APP_COMMAND) {
+            @Override
+            public void commandOutput(int id, String line) {
+                // Focused app is not WhatsApp?
+                if (!line.contains(WhatsApp.PACKAGE)) {
+                    try {
+                        // Try to restart WhatsApp
+                        restartWhatsApp();
+                    }
+                    catch (Exception exc) {
+                        // Log exception
+                        Log.e(Logging.TAG, "Restarting WhatsApp failed", exc);
+                    }
+                }
+                else {
+                    // Log WhatsApp state
+                    Log.d(Logging.TAG, "WhatsApp is currently focused");
+                }
+
+                // Must call the super method when overriding!
+                super.commandOutput(id, line);
+            }
+
+            @Override
+            public void commandTerminated(int id, String reason) {
+            }
+
+            @Override
+            public void commandCompleted(int id, int exitCode) {
+            }
+
+        };
+
+        // Run the dumpsys command
+        RootShell.getShell(true).add(command);
     }
 
     private void restartWhatsApp() throws Exception {
