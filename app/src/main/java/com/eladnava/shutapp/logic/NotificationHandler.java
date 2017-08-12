@@ -255,11 +255,19 @@ public class NotificationHandler {
         // Get first row
         HashMap<String, String> row = rows.get(0);
 
+        // Get mute end timestamp as string
+        String muteEnd = row.get("mute_end");
+
+        // Empty value?
+        if (muteEnd == null || muteEnd.equals("")) {
+            return false;
+        }
+
         // Extract mute_end timestamp
-        long muteEnd = Long.parseLong(row.get("mute_end"));
+        long muteEndTimestamp = Long.parseLong(muteEnd);
 
         // Mute ended?
-        if (muteEnd < System.currentTimeMillis()) {
+        if (muteEndTimestamp < System.currentTimeMillis()) {
             return false;
         }
 
